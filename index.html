@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AYO BELAJAR PAI! - Media Interaktif SLB Fase D</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #FEF9E7;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    h1, h2, h3, .font-display {
+      font-family: 'Fredoka', sans-serif;
+    }
+    .btn-bounce {
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease;
+    }
+    .btn-bounce:active {
+      transform: scale(0.94) translateY(4px);
+    }
+    .card-shadow {
+      box-shadow: 0 8px 0 rgba(0, 0, 0, 0.12);
+    }
+    .btn-shadow-green { box-shadow: 0 6px 0 #15803d; }
+    .btn-shadow-blue { box-shadow: 0 6px 0 #1d4ed8; }
+    .btn-shadow-amber { box-shadow: 0 6px 0 #b45309; }
+    .btn-shadow-purple { box-shadow: 0 6px 0 #6d28d9; }
+    .btn-shadow-rose { box-shadow: 0 6px 0 #be123c; }
+    .btn-shadow-teal { box-shadow: 0 6px 0 #0f766e; }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-float {
+      animation: floatSlow 3s ease-in-out infinite;
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.85); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .animate-pop {
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes mouthTalk {
+      0%, 100% { transform: scaleY(0.3); }
+      50% { transform: scaleY(1.2); }
+    }
+    .mouth-talking {
+      transform-origin: center;
+      animation: mouthTalk 0.25s infinite;
+    }
+
+    .arabic-text {
+      font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800 overflow-x-hidden">
+
+  <!-- HEADER & KARAKTER PENDAMPING AHMAD -->
+  <header class="bg-white border-b-4 border-amber-300 sticky top-0 z-30 px-3 py-2 sm:px-6 sm:py-3 shadow-sm">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <!-- Tombol Beranda -->
+      <button onclick="goHome()" class="btn-bounce flex items-center gap-2 bg-amber-400 hover:bg-amber-300 text-amber-950 font-display font-bold text-lg sm:text-xl px-4 py-2.5 rounded-2xl btn-shadow-amber">
+        <span class="text-2xl">🏠</span>
+        <span>BERANDA</span>
+      </button>
+
+      <!-- Karakter Pendamping AHMAD -->
+      <div onclick="speakAhmad()" class="cursor-pointer flex items-center gap-3 bg-sky-50 border-2 border-sky-300 px-3 py-1.5 rounded-2xl max-w-md flex-1 sm:flex-initial">
+        <div class="w-12 h-12 sm:w-14 sm:h-14 shrink-0 relative animate-float">
+          <!-- SVG Karakter Ahmad -->
+          <svg viewBox="0 0 100 100" class="w-full h-full">
+            <circle cx="50" cy="54" r="36" fill="#FDE68A" stroke="#D97706" stroke-width="3"/>
+            <!-- Peci Putih -->
+            <path d="M18 42 Q50 12 82 42 Z" fill="#FFFFFF" stroke="#0284C7" stroke-width="3"/>
+            <rect x="18" y="38" width="64" height="8" rx="4" fill="#38BDF8"/>
+            <!-- Mata -->
+            <circle cx="37" cy="54" r="4.5" fill="#1E293B"/>
+            <circle cx="63" cy="54" r="4.5" fill="#1E293B"/>
+            <circle cx="38.5" cy="52.5" r="1.5" fill="#FFFFFF"/>
+            <circle cx="64.5" cy="52.5" r="1.5" fill="#FFFFFF"/>
+            <!-- Pipi -->
+            <circle cx="29" cy="63" r="5" fill="#FCA5A5" opacity="0.7"/>
+            <circle cx="71" cy="63" r="5" fill="#FCA5A5" opacity="0.7"/>
+            <!-- Mulut Animasi -->
+            <ellipse id="ahmad-mouth" cx="50" cy="68" rx="8" ry="5" fill="#EF4444"/>
+          </svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-sky-700 bg-sky-200 px-2 py-0.5 rounded-full">AHMAD</span>
+            <span class="text-sm">🔊</span>
+          </div>
+          <p id="ahmad-speech" class="text-sm sm:text-base font-bold text-slate-800 truncate">Halo teman! Ayo belajar bersama!</p>
+        </div>
+      </div>
+
+      <!-- Indikator Bintang & Panduan Guru -->
+      <div class="flex items-center gap-2">
+        <button onclick="openStarPage()" class="btn-bounce flex items-center gap-1.5 bg-yellow-100 border-2 border-yellow-400 px-3 py-2 rounded-2xl font-display font-bold text-lg text-yellow-800">
+          <span class="text-2xl">⭐</span>
+          <span id="star-count">0</span>
+        </button>
+        <button onclick="toggleTeacherModal()" title="Panduan & Dokumentasi Guru" class="btn-bounce bg-slate-100 hover:bg-slate-200 border-2 border-slate-300 p-2.5 rounded-2xl text-xl">
+          👩‍🏫
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- KONTEN UTAMA DINAMIS -->
+  <main id="app-container" class="flex-1 max-w-5xl w-full mx-auto p-3 sm:p-6 flex flex-col justify-center">
+    <!-- Konten dirender oleh JavaScript -->
+  </main>
+
+  <!-- MODAL UMPAN BALIK POSITIF (PENGGANTI ALERT) -->
+  <div id="feedback-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div id="feedback-card" class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full text-center border-4 border-emerald-400 card-shadow animate-pop">
+      <div id="feedback-emoji" class="text-7xl sm:text-8xl mb-4">🌟</div>
+      <h2 id="feedback-title" class="font-display text-3xl sm:text-4xl font-bold text-emerald-600 mb-2">HEBAT!</h2>
+      <p id="feedback-msg" class="text-xl sm:text-2xl font-bold text-slate-700 mb-6">Kamu pintar sekali!</p>
+      <div class="flex justify-center gap-3">
+        <button onclick="speakCurrentFeedback()" class="btn-bounce bg-sky-500 text-white font-display font-bold text-xl px-5 py-3.5 rounded-2xl btn-shadow-blue">
+          🔊 DENGAR
+        </button>
+        <button id="feedback-next-btn" onclick="closeFeedback()" class="btn-bounce bg-emerald-500 text-white font-display font-bold text-xl px-7 py-3.5 rounded-2xl btn-shadow-green">
+          LANJUT ▶
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PANDUAN & DOKUMENTASI GURU -->
+  <div id="teacher-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-3 sm:p-6">
+    <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] flex flex-col border-4 border-sky-400 overflow-hidden">
+      <div class="bg-sky-500 text-white p-4 sm:p-5 flex items-center justify-between">
+        <h2 class="font-display text-xl sm:text-2xl font-bold">👩‍🏫 Panduan Guru & Pengaturan Audio Asli</h2>
+        <button onclick="toggleTeacherModal()" class="bg-white/20 hover:bg-white/30 text-white font-bold px-3 py-1.5 rounded-xl text-lg">✖ Tutup</button>
+      </div>
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-5 text-base text-slate-700">
+        <div class="bg-amber-50 border-2 border-amber-300 p-4 rounded-2xl">
+          <h3 class="font-display font-bold text-lg text-amber-900 mb-1">🔊 Catatan Penting Pelafalan Huruf Hijaiyah</h3>
+          <p class="text-sm sm:text-base">Secara bawaan, aplikasi menggunakan suara sintetis Bahasa Indonesia (Web Speech API) untuk narasi dan pelafalan pendekatan. Agar pelafalan huruf hijaiyah kasratain sesuai makhraj ustaz/guru, Anda dapat memasukkan file audio asli (<code>.mp3</code> / <code>.wav</code>) ke folder <code>assets/audio/</code> atau mengunggahnya langsung di bawah ini untuk sesi belajar saat ini.</p>
+        </div>
+
+        <!-- Upload Audio Custom Guru -->
+        <div class="border-2 border-slate-200 rounded-2xl p-4">
+          <h3 class="font-display font-bold text-lg text-slate-800 mb-3">🎙️ Ganti / Uji Audio Huruf Hijaiyah Kasratain</h3>
+          <div id="custom-audio-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div>
+
+        <!-- Petunjuk Penggunaan Cepat -->
+        <div class="border-2 border-slate-200 rounded-2xl p-4 space-y-2">
+          <h3 class="font-display font-bold text-lg text-slate-800">📘 Langkah Penggunaan di Kelas SLB (Fase D)</h3>
+          <ul class="list-disc pl-5 space-y-1 text-sm sm:text-base">
+            <li><strong>Tanpa Membaca:</strong> Setiap tombol, gambar, soal, dan pilihan jawaban memiliki tombol speaker (🔊) atau otomatis bersuara saat disentuh.</li>
+            <li><strong>Metode Dengar → Lihat → Tirukan → Ulangi:</strong> Ajak siswa menekan tombol <em>Dengarkan</em>, mengamati ilustrasi mulut, lalu menekan <em>Ayo Tirukan</em> bersama guru.</li>
+            <li><strong>Tanpa Hukuman:</strong> Jika siswa salah memilih jawaban, tidak ada tanda silang merah. Karakter Ahmad akan menyemangati dengan kalimat <em>"Yuk, coba lagi!"</em>.</li>
+            <li><strong>Offline & Fleksibel:</strong> File tunggal <code>index.html</code> ini bisa langsung dijalankan di HP Android, Tablet, Laptop, maupun layar sentuh IFP sekolah.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. STATE & PENYIMPANAN PROGRES SEDERHANA
+    // =========================================================================
+    const state = {
+      stars: parseInt(localStorage.getItem('pai_slb_stars') || '0', 10),
+      completedTopics: JSON.parse(localStorage.getItem('pai_slb_topics') || '[]'),
+      currentScreen: 'home',
+      currentTopicId: null,
+      topicStep: 0,
+      hijaiyahIndex: 0,
+      practiceIndex: 0,
+      storyIndex: 0,
+      gameType: null,
+      gameStep: 0,
+      evalIndex: 0,
+      evalScore: 0,
+      lastFeedbackText: '',
+      onFeedbackClose: null,
+      customAudioUrls: {} // Menyimpan URL blob audio MP3/WAV dari guru jika diunggah
+    };
+
+    function saveProgress() {
+      localStorage.setItem('pai_slb_stars', state.stars.toString());
+      localStorage.setItem('pai_slb_topics', JSON.stringify(state.completedTopics));
+      document.getElementById('star-count').textContent = state.stars;
+    }
+
+    function addStar(amount = 1) {
+      state.stars += amount;
+      saveProgress();
+      playTone('star');
+    }
+
+    // =========================================================================
+    // 2. SISTEM AUDIO WAJIB (WEB SPEECH API + WEB AUDIO API + FALLBACK AUDIO ASLI)
+    // =========================================================================
+    let currentAudioObj = null;
+
+    function setAhmadSpeech(text, autoSpeak = true) {
+      const speechEl = document.getElementById('ahmad-speech');
+      if (speechEl) speechEl.textContent = text;
+      if (autoSpeak) speakText(text);
+    }
+
+    function speakAhmad() {
+      const text = document.getElementById('ahmad-speech').textContent;
+      speakText(text);
+    }
+
+    function animateMouth(isTalking) {
+      const mouth = document.getElementById('ahmad-mouth');
+      const hijaiyahMouth = document.getElementById('hijaiyah-mouth');
+      if (mouth) {
+        isTalking ? mouth.classList.add('mouth-talking') : mouth.classList.remove('mouth-talking');
+      }
+      if (hijaiyahMouth) {
+        isTalking ? hijaiyahMouth.classList.add('mouth-talking') : hijaiyahMouth.classList.remove('mouth-talking');
+      }
+    }
+
+    function speakText(text, customAudioKey = null) {
+      // Hentikan suara yang sedang berjalan
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (currentAudioObj) {
+        currentAudioObj.pause();
+        currentAudioObj = null;
+      }
+
+      // Cek apakah guru sudah mengunggah/menyediakan file audio asli untuk kunci ini
+      if (customAudioKey && state.customAudioUrls[customAudioKey]) {
+        currentAudioObj = new Audio(state.customAudioUrls[customAudioKey]);
+        animateMouth(true);
+        currentAudioObj.onended = () => animateMouth(false);
+        currentAudioObj.onerror = () => {
+          animateMouth(false);
+          fallbackSpeechSynthesis(text);
+        };
+        currentAudioObj.play().catch(() => fallbackSpeechSynthesis(text));
+        return;
+      }
+
+      fallbackSpeechSynthesis(text);
+    }
+
+    function fallbackSpeechSynthesis(text) {
+      if (!('speechSynthesis' in window)) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 0.85; // Kecepatan lembut & jelas untuk siswa Tunagrahita
+      utterance.pitch = 1.15; // Intonasi ceria & ramah anak
+
+      const voices = window.speechSynthesis.getVoices();
+      const idVoice = voices.find(v => v.lang.includes('id') || v.lang.includes('ID'));
+      if (idVoice) utterance.voice = idVoice;
+
+      utterance.onstart = () => animateMouth(true);
+      utterance.onend = () => animateMouth(false);
+      utterance.onerror = () => animateMouth(false);
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Efek suara ceria menggunakan Web Audio API (tanpa file eksternal)
+    function playTone(type) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(520, now);
+          osc.frequency.exponentialRampToValueAtTime(680, now + 0.08);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.09);
+        } else if (type === 'success' || type === 'star') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+          osc.frequency.setValueAtTime(1046.5, now + 0.3); // C6
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.55);
+          osc.start(now);
+          osc.stop(now + 0.56);
+        } else if (type === 'gentle') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(380, now);
+          osc.frequency.setValueAtTime(420, now + 0.15);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.32);
+        }
+      } catch (e) {
+        // Abaikan jika browser memblokir audio otomatis sebelum interaksi pertama
+      }
+    }
+
+    // =========================================================================
+    // 3. BANK DATA MATERI PEMBELAJARAN (7 MATERI LENGKAP)
+    // =========================================================================
+    const HIJAIYAH_DATA = [
+      { id: 'ba_kasratain', arabic: 'بٍ', latin: 'BIN', hint: 'Bibir dirapatkan lalu senyum: BIN', emoji: '🏠', word: 'Baytin (Rumah)', audioText: 'Ini huruf Ba kasratain. Bunyinya: BIN. Ayo tirukan: BIN.' },
+      { id: 'ta_kasratain', arabic: 'تٍ', latin: 'TIN', hint: 'Ujung lidah di gigi atas: TIN', emoji: '🍎', word: 'Buah Tin', audioText: 'Ini huruf Ta kasratain. Bunyinya: TIN. Ayo tirukan: TIN.' },
+      { id: 'jim_kasratain', arabic: 'جٍ', latin: 'JIN', hint: 'Tengah lidah ke langit-langit: JIN', emoji: '🐪', word: 'Jamalin (Unta)', audioText: 'Ini huruf Jim kasratain. Bunyinya: JIN. Ayo tirukan: JIN.' },
+      { id: 'dal_kasratain', arabic: 'دٍ', latin: 'DIN', hint: 'Ujung lidah menyentuh pangkal gigi: DIN', emoji: '🐓', word: 'Diikin (Ayam)', audioText: 'Ini huruf Dal kasratain. Bunyinya: DIN. Ayo tirukan: DIN.' },
+      { id: 'sin_kasratain', arabic: 'سٍ', latin: 'SIN', hint: 'Gigi rapat berdesis lembut: SIN', emoji: '🐟', word: 'Samakin (Ikan)', audioText: 'Ini huruf Sin kasratain. Bunyinya: SIN. Ayo tirukan: SIN.' },
+      { id: 'mim_kasratain', arabic: 'مٍ', latin: 'MIN', hint: 'Bibir tertutup rapat lalu bunyi: MIN', emoji: '💧', word: 'Maain (Air)', audioText: 'Ini huruf Mim kasratain. Bunyinya: MIN. Ayo tirukan: MIN.' },
+      { id: 'nun_kasratain', arabic: 'نٍ', latin: 'NIN', hint: 'Lidah menyentuh gusi atas: NIN', emoji: '🌴', word: 'Nakhlin (Kurma)', audioText: 'Ini huruf Nun kasratain. Bunyinya: NIN. Ayo tirukan: NIN.' },
+      { id: 'lam_kasratain', arabic: 'لٍ', latin: 'LIN', hint: 'Lidah naik ke langit-langit depan: LIN', emoji: '🍋', word: 'Laymuunin (Lemon)', audioText: 'Ini huruf Lam kasratain. Bunyinya: LIN. Ayo tirukan: LIN.' }
+    ];
+
+    const TOPICS_MENU = [
+      { id: 1, title: 'Huruf Hijaiyah Kasratain', short: 'Mengenal bunyi ـٍ (in)', icon: 'بٍ', color: 'bg-emerald-500', shadow: 'btn-shadow-green' },
+      { id: 2, title: 'Ayo Melafalkan', short: 'Latihan suara huruf', icon: '👄', color: 'bg-sky-500', shadow: 'btn-shadow-blue' },
+      { id: 3, title: 'Aku Cinta Ilmu', short: 'QS. Al-Mujadilah: 11', icon: '📚', color: 'bg-amber-500', shadow: 'btn-shadow-amber' },
+      { id: 4, title: 'Aku Anak yang Sabar', short: 'QS. Al-Baqarah: 155-157', icon: '🤲', color: 'bg-purple-500', shadow: 'btn-shadow-purple' },
+      { id: 5, title: 'Aku Sayang Teman', short: 'Kasih sayang sesama', icon: '🤝', color: 'bg-rose-500', shadow: 'btn-shadow-rose' },
+      { id: 6, title: 'Aku Berbuat Baik', short: 'Pilih gambar baik', icon: '💖', color: 'bg-teal-500', shadow: 'btn-shadow-teal' },
+      { id: 7, title: 'Aku Sayang Lingkungan', short: 'Cerita menjaga alam', icon: '🌱', color: 'bg-lime-600', shadow: 'btn-shadow-green' }
+    ];
+
+    // Materi 3: Cinta Ilmu (QS. Al-Mujadilah: 11)
+    const CINTA_ILMU_SLIDES = [
+      {
+        title: 'Allah Sayang Anak yang Belajar',
+        emoji: '📖✨',
+        desc: 'QS. Al-Mujadilah Ayat 11: Allah menyukai orang yang beriman dan berilmu.',
+        audio: 'Allah sangat menyayangi anak yang rajin belajar dan berilmu.'
+      },
+      {
+        title: 'Belajar Bersama Guru',
+        emoji: '👩‍🏫👦',
+        desc: 'Kita mendengarkan guru dengan tenang dan senang.',
+        audio: 'Kita mau mendengarkan guru saat belajar di kelas.'
+      },
+      {
+        title: 'Membaca Buku & Belajar',
+        emoji: '📚👀',
+        desc: 'Kita melihat gambar, membaca buku, dan belajar sesuai kemampuan.',
+        audio: 'Kita senang melihat buku dan belajar hal baru setiap hari.'
+      },
+      {
+        title: 'Belajar Pakai Komputer',
+        emoji: '💻😊',
+        desc: 'Kita menggunakan komputer dan HP untuk belajar hal baik.',
+        audio: 'Kita bisa belajar menggunakan komputer atau tablet bersama guru.'
+      },
+      {
+        title: 'Membantu Teman Belajar',
+        emoji: '🧒🤝👧',
+        desc: 'Ilmu yang kita punya digunakan untuk menolong teman.',
+        audio: 'Kita menggunakan ilmu untuk membantu teman melakukan kebaikan.'
+      }
+    ];
+
+    // Materi 4: Sabar Menghadapi Musibah (QS. Al-Baqarah: 155-157)
+    const SABAR_SLIDES = [
+      {
+        title: 'Belajar Bersabar & Berdoa',
+        emoji: '🤲💚',
+        desc: 'QS. Al-Baqarah 155-157: Saat ada kesulitan, kita sabar dan berdoa kepada Allah.',
+        audio: 'Ketika mengalami kesulitan, kita belajar bersabar dan berdoa kepada Allah.'
+      },
+      {
+        title: 'Mainan Rusak',
+        emoji: '🧸🔧',
+        desc: 'Saat mainan rusak, kita tidak marah atau melempar. Kita minta bantuan.',
+        audio: 'Ketika mainan rusak, kita tidak marah. Kita berusaha tenang.'
+      },
+      {
+        title: 'Terjatuh Saat Bermain',
+        emoji: '🏃‍♂️🩹',
+        desc: 'Saat terjatuh, kita tenang, boleh menangis sebentar, lalu minta tolong guru.',
+        audio: 'Ketika terjatuh, kita berusaha tenang dan meminta bantuan.'
+      },
+      {
+        title: 'Hujan Tidak Bisa Main di Luar',
+        emoji: '🌧️🏠',
+        desc: 'Saat hujan turun, kita bermain dengan sabar di dalam rumah atau kelas.',
+        audio: 'Saat hujan turun dan tidak bisa bermain di luar, kita bermain di dalam dengan sabar.'
+      },
+      {
+        title: 'Sulit Mengerjakan Tugas',
+        emoji: '✏️🙋‍♂️',
+        desc: 'Jika tugas terasa sulit, kita tidak menyerah. Kita angkat tangan minta bantuan guru.',
+        audio: 'Ketika tugas terasa sulit, kita angkat tangan dan minta bantuan guru.'
+      }
+    ];
+
+    // Materi 5: Kasih Sayang Kepada Sesama (Baik vs Tidak Baik)
+    const KASIH_SAYANG_PAIRS = [
+      {
+        title: 'Menolong Teman Jatuh',
+        goodEmoji: '🤝😊',
+        goodText: 'Menolong teman yang jatuh',
+        badEmoji: '😝👉',
+        badText: 'Menertawakan teman jatuh',
+        audio: 'Perilaku baik adalah menolong teman yang terjatuh. Bukan menertawakannya.'
+      },
+      {
+        title: 'Berbagi Makanan',
+        goodEmoji: '🥪💛',
+        goodText: 'Berbagi makanan dengan teman',
+        badEmoji: '😠🍔',
+        badText: 'Pelit dan merebut makanan',
+        audio: 'Perilaku baik adalah berbagi makanan dengan teman.'
+      },
+      {
+        title: 'Meminjamkan Alat Tulis',
+        goodEmoji: '✏️🎁',
+        goodText: 'Meminjamkan pensil kepada teman',
+        badEmoji: '🙅‍♂️✏️',
+        badText: 'Tidak mau meminjamkan pensil',
+        audio: 'Perilaku baik adalah meminjamkan pensil saat teman lupa membawa.'
+      },
+      {
+        title: 'Menyayangi Orang Tua & Guru',
+        goodEmoji: '👨‍👩‍👦🏫',
+        goodText: 'Salim dan menghormati orang tua & guru',
+        badEmoji: '😤🗣️',
+        badText: 'Berteriak kepada orang tua & guru',
+        audio: 'Kita harus menyayangi orang tua dan menghormati guru.'
+      },
+      {
+        title: 'Tidak Memukul & Menghibur Teman',
+        goodEmoji: '🤗❤️',
+        goodText: 'Menghibur teman yang sedih & memberi salam',
+        badEmoji: '👊😢',
+        badText: 'Memukul atau mengejek teman',
+        audio: 'Kita tidak boleh memukul atau mengejek. Kita hibur teman yang sedih.'
+      }
+    ];
+
+    // Materi 6: Menyebutkan Sikap Kasih Sayang (Identifikasi Gambar)
+    const SIKAP_BAIK_QUIZ = [
+      {
+        question: 'Mana gambar anak yang menyayangi temannya?',
+        options: [
+          { emoji: '🤝😊', label: 'Membantu teman', correct: true },
+          { emoji: '🖐️😠', label: 'Mendorong teman', correct: false }
+        ]
+      },
+      {
+        question: 'Mana gambar anak yang sopan kepada guru?',
+        options: [
+          { emoji: '🙈🙉', label: 'Berlari saat guru bicara', correct: false },
+          { emoji: '🙋‍♂️😊', label: 'Mendengarkan guru', correct: true }
+        ]
+      },
+      {
+        question: 'Mana gambar perilaku berbagi?',
+        options: [
+          { emoji: '🍎🤲', label: 'Berbagi buah dengan teman', correct: true },
+          { emoji: '😤🍎', label: 'Merebut mainan teman', correct: false }
+        ]
+      },
+      {
+        question: 'Mana gambar yang membuat teman senang?',
+        options: [
+          { emoji: '😜👎', label: 'Mengejek teman', correct: false },
+          { emoji: '👋😄', label: 'Mengucapkan salam', correct: true }
+        ]
+      }
+    ];
+
+    // Materi 7: Cerita Bergambar "AKU SAYANG LINGKUNGANKU"
+    const CERITA_LINGKUNGAN = [
+      {
+        step: 1,
+        title: 'Adegan 1: Melihat Sampah',
+        emoji: '👀🗑️🍂',
+        text: 'Ahmad melihat sampah plastik di halaman sekolah.',
+        audio: 'Adegan satu. Ahmad melihat sampah di halaman sekolah.'
+      },
+      {
+        step: 2,
+        title: 'Adegan 2: Mengambil Sampah',
+        emoji: '👦🤏🍂',
+        text: 'Ahmad mengambil sampah itu dengan tangan.',
+        audio: 'Adegan dua. Ahmad mengambil sampah itu.'
+      },
+      {
+        step: 3,
+        title: 'Adegan 3: Membuang ke Tempat Sampah',
+        emoji: '🗑️✅😊',
+        text: 'Ahmad membuang sampah ke dalam tempat sampah.',
+        audio: 'Adegan tiga. Ahmad membuang sampah pada tempatnya.'
+      },
+      {
+        step: 4,
+        title: 'Adegan 4: Menyiram Tanaman',
+        emoji: '🚿🌱💧',
+        text: 'Ahmad menyiram bunga dengan air secukupnya.',
+        audio: 'Adegan empat. Ahmad menyiram tanaman dan menghemat air.'
+      },
+      {
+        step: 5,
+        title: 'Adegan 5: Menjaga Kebersihan Kelas',
+        emoji: '🧹🏫✨',
+        text: 'Ahmad menyapu kelas agar bersih dan rapi.',
+        audio: 'Adegan lima. Ahmad menjaga kebersihan kelas.'
+      },
+      {
+        step: 6,
+        title: 'Adegan 6: Tidak Merusak Tanaman',
+        emoji: '🌺❤️🚫✂️',
+        text: 'Ahmad menjaga bunga dan tidak memetik sembarangan.',
+        audio: 'Adegan enam. Ahmad tidak merusak tanaman dan bunga.'
+      },
+      {
+        step: 7,
+        title: 'Adegan 7: Lingkungan Bersih & Indah',
+        emoji: '🌳☀️😄🏡',
+        text: 'Ahmad tersenyum senang melihat sekolah bersih dan asri.',
+        audio: 'Adegan tujuh. Ahmad tersenyum bahagia melihat lingkungan bersih.'
+      }
+    ];
+
+    // =========================================================================
+    // 4. BANK SOAL EVALUASI INTERAKTIF (20 SOAL SESUAI PEMBAGIAN)
+    // =========================================================================
+    // Pembagian: 4 Hijaiyah kasratain, 3 Pelafalan, 3 Cinta Ilmu, 3 Sabar, 3 Kasih Sayang, 2 Perilaku Baik, 2 Cinta Lingkungan
+    const EVALUATION_QUESTIONS = [
+      // 4 Soal Huruf Hijaiyah Kasratain
+      { category: 'Hijaiyah Kasratain', q: 'Sentuh huruf Ba kasratain yang berbunyi BIN!', options: [{ main: 'بٍ', label: 'BIN', correct: true }, { main: 'تٍ', label: 'TIN', correct: false }] },
+      { category: 'Hijaiyah Kasratain', q: 'Mana huruf Ta kasratain yang berbunyi TIN?', options: [{ main: 'جٍ', label: 'JIN', correct: false }, { main: 'تٍ', label: 'TIN', correct: true }] },
+      { category: 'Hijaiyah Kasratain', q: 'Pilih huruf Mim kasratain yang berbunyi MIN!', options: [{ main: 'مٍ', label: 'MIN', correct: true }, { main: 'نٍ', label: 'NIN', correct: false }, { main: 'لٍ', label: 'LIN', correct: false }] },
+      { category: 'Hijaiyah Kasratain', q: 'Tanda harakat kasratain ada di bawah huruf. Mana yang benar?', options: [{ main: 'بٍ', label: 'Ada dua garis di bawah', correct: true }, { main: 'ب', label: 'Tidak ada harakat', correct: false }] },
+
+      // 3 Soal Pelafalan Hijaiyah
+      { category: 'Pelafalan Hijaiyah', q: 'Dengarkan bunyi: JIN. Huruf mana yang berbunyi JIN?', soundKey: 'jim_kasratain', soundText: 'JIN', options: [{ main: 'جٍ', label: 'JIN', correct: true }, { main: 'دٍ', label: 'DIN', correct: false }] },
+      { category: 'Pelafalan Hijaiyah', q: 'Dengarkan bunyi: SIN. Pilih huruf SIN!', soundKey: 'sin_kasratain', soundText: 'SIN', options: [{ main: 'مٍ', label: 'MIN', correct: false }, { main: 'سٍ', label: 'SIN', correct: true }] },
+      { category: 'Pelafalan Hijaiyah', q: 'Dengarkan bunyi: NIN. Sentuh huruf NIN!', soundKey: 'nun_kasratain', soundText: 'NIN', options: [{ main: 'نٍ', label: 'NIN', correct: true }, { main: 'بٍ', label: 'BIN', correct: false }, { main: 'تٍ', label: 'TIN', correct: false }] },
+
+      // 3 Soal Cinta Ilmu
+      { category: 'Cinta Ilmu', q: 'Allah menyayangi anak yang rajin apa?', options: [{ main: '📚😊', label: 'Rajin belajar', correct: true }, { main: '😴💤', label: 'Malas belajar', correct: false }] },
+      { category: 'Cinta Ilmu', q: 'Saat guru sedang menjelaskan di kelas, kita harus bagaimana?', options: [{ main: '👂👀', label: 'Mendengarkan guru', correct: true }, { main: '🗣️📢', label: 'Berteriak sendiri', correct: false }] },
+      { category: 'Cinta Ilmu', q: 'Jika kita punya ilmu, kita gunakan untuk apa?', options: [{ main: '🤝❤️', label: 'Membantu teman', correct: true }, { main: '😠👊', label: 'Mengganggu teman', correct: false }] },
+
+      // 3 Soal Sabar Menghadapi Kesulitan
+      { category: 'Anak Sabar', q: 'Jika mainan kita rusak, apa yang sebaiknya kita lakukan?', options: [{ main: '🤲😊', label: 'Sabar dan minta bantuan', correct: true }, { main: '😡💥', label: 'Marah dan melempar', correct: false }] },
+      { category: 'Anak Sabar', q: 'Saat teman terjatuh atau kita terjatuh, kita berusaha apa?', options: [{ main: '🧘‍♂️🩹', label: 'Tenang dan berdoa', correct: true }, { main: '🤬👣', label: 'Marah-marah', correct: false }] },
+      { category: 'Anak Sabar', q: 'Jika tugas sekolah terasa sulit, kita lakukan apa?', options: [{ main: '🙋‍♂️👩‍🏫', label: 'Minta bantuan guru', correct: true }, { main: '😭📄', label: 'Merobek buku', correct: false }] },
+
+      // 3 Soal Kasih Sayang Sesama
+      { category: 'Kasih Sayang', q: 'Temanmu lupa membawa pensil. Apa yang kamu lakukan?', options: [{ main: '✏️🎁', label: 'Meminjamkan pensil', correct: true }, { main: '😝🙅‍♂️', label: 'Mengejek teman', correct: false }] },
+      { category: 'Kasih Sayang', q: 'Bagaimana sikap kita kepada ayah, ibu, dan guru?', options: [{ main: '🤗❤️', label: 'Menyayangi dan hormat', correct: true }, { main: '😤💢', label: 'Membentak', correct: false }] },
+      { category: 'Kasih Sayang', q: 'Ada teman yang sedang sedih. Apa yang kita lakukan?', options: [{ main: '😊💬', label: 'Menghibur teman', correct: true }, { main: '👊😢', label: 'Memukul teman', correct: false }] },
+
+      // 2 Soal Perilaku Baik
+      { category: 'Perilaku Baik', q: 'Mana gambar anak yang berbuat baik kepada teman?', options: [{ main: '🥪🤝', label: 'Berbagi makanan', correct: true }, { main: '🖐️😠', label: 'Mendorong teman', correct: false }] },
+      { category: 'Perilaku Baik', q: 'Saat bertemu guru di pagi hari, kita melakukan apa?', options: [{ main: '👋😊', label: 'Mengucapkan salam', correct: true }, { main: '🙈🏃‍♂️', label: 'Buang muka', correct: false }] },
+
+      // 2 Soal Cinta Lingkungan
+      { category: 'Cinta Lingkungan', q: 'Ke mana kita harus membuang sampah?', options: [{ main: '🗑️✅', label: 'Ke tempat sampah', correct: true }, { main: '🌊❌', label: 'Ke sungai atau lantai', correct: false }] },
+      { category: 'Cinta Lingkungan', q: 'Bagaimana cara kita menyayangi tanaman di sekolah?', options: [{ main: '🚿🌱', label: 'Menyiram tanaman', correct: true }, { main: '✂️🥀', label: 'Merusak bunga', correct: false }] }
+    ];
+
+    // =========================================================================
+    // 5. KONTROL NAVIGASI & MODAL UMPAN BALIK
+    // =========================================================================
+    function showFeedback(isPositive, title, message, onCloseCallback = null) {
+      const modal = document.getElementById('feedback-modal');
+      const card = document.getElementById('feedback-card');
+      const emojiEl = document.getElementById('feedback-emoji');
+      const titleEl = document.getElementById('feedback-title');
+      const msgEl = document.getElementById('feedback-msg');
+      const btnEl = document.getElementById('feedback-next-btn');
+
+      state.lastFeedbackText = `${title}. ${message}`;
+      state.onFeedbackClose = onCloseCallback;
+
+      if (isPositive) {
+        playTone('success');
+        card.className = 'bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full text-center border-4 border-emerald-400 card-shadow animate-pop';
+        emojiEl.textContent = ['🌟', '🎉', '👏', '🏆'][Math.floor(Math.random() * 4)];
+        titleEl.className = 'font-display text-3xl sm:text-4xl font-bold text-emerald-600 mb-2';
+        btnEl.className = 'btn-bounce bg-emerald-500 text-white font-display font-bold text-xl px-7 py-3.5 rounded-2xl btn-shadow-green';
+        btnEl.textContent = 'LANJUT ▶';
+      } else {
+        // Tidak ada tanda silang merah atau kata negatif
+        playTone('gentle');
+        card.className = 'bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full text-center border-4 border-amber-400 card-shadow animate-pop';
+        emojiEl.textContent = '🤗';
+        titleEl.className = 'font-display text-3xl sm:text-4xl font-bold text-amber-600 mb-2';
+        btnEl.className = 'btn-bounce bg-amber-500 text-white font-display font-bold text-xl px-7 py-3.5 rounded-2xl btn-shadow-amber';
+        btnEl.textContent = 'COBA LAGI 🔁';
+      }
+
+      titleEl.textContent = title;
+      msgEl.textContent = message;
+
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      setAhmadSpeech(state.lastFeedbackText, true);
+    }
+
+    function speakCurrentFeedback() {
+      speakText(state.lastFeedbackText);
+    }
+
+    function closeFeedback() {
+      playTone('click');
+      const modal = document.getElementById('feedback-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      if (typeof state.onFeedbackClose === 'function') {
+        const cb = state.onFeedbackClose;
+        state.onFeedbackClose = null;
+        cb();
+      }
+    }
+
+    function goHome() {
+      playTone('click');
+      state.currentScreen = 'home';
+      renderHome();
+      setAhmadSpeech('Ayo pilih gambar pelajaran atau permainan!', true);
+    }
+
+    function openGuide() {
+      playTone('click');
+      state.currentScreen = 'guide';
+      renderGuide();
+      setAhmadSpeech('Ini cara belajar kita. Sentuh gambar untuk mendengarkan suara!', true);
+    }
+
+    function openGamesMenu() {
+      playTone('click');
+      state.currentScreen = 'games';
+      renderGamesMenu();
+      setAhmadSpeech('Ayo bermain sambil belajar! Pilih permainan yang kamu suka!', true);
+    }
+
+    function startEvaluation() {
+      playTone('click');
+      state.currentScreen = 'eval';
+      state.evalIndex = 0;
+      state.evalScore = 0;
+      renderEvaluation();
+    }
+
+    function openStarPage() {
+      playTone('click');
+      state.currentScreen = 'stars';
+      renderStarPage();
+      setAhmadSpeech(`Hebat! Kamu sudah mengumpulkan ${state.stars} bintang!`, true);
+    }
+
+    // =========================================================================
+    // 6. HALAMAN 1 — BERANDA
+    // =========================================================================
+    function renderHome() {
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <!-- Banner Judul Utama -->
+          <div class="bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500 rounded-3xl p-5 sm:p-7 text-white text-center card-shadow relative overflow-hidden">
+            <button onclick="speakText('Ayo Belajar PAI! Belajar dengan gambar, suara, dan permainan.')" class="btn-bounce bg-white/25 hover:bg-white/35 text-white px-4 py-1.5 rounded-full text-sm sm:text-base font-bold mb-2 inline-flex items-center gap-2">
+              <span>🔊</span> Dengarkan Judul
+            </button>
+            <h1 class="font-display text-3xl sm:text-5xl font-bold tracking-wide drop-shadow">AYO BELAJAR PAI!</h1>
+            <p class="text-lg sm:text-2xl font-bold text-emerald-50 mt-1">Belajar dengan gambar, suara, dan permainan</p>
+          </div>
+
+          <!-- 4 Tombol Aksi Utama -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <button onclick="openTopic(1)" class="btn-bounce bg-emerald-500 hover:bg-emerald-400 text-white p-4 rounded-3xl btn-shadow-green flex flex-col items-center justify-center gap-1">
+              <span class="text-3xl sm:text-4xl">▶️</span>
+              <span class="font-display font-bold text-base sm:text-xl">MULAI BELAJAR</span>
+            </button>
+            <button onclick="openGamesMenu()" class="btn-bounce bg-purple-500 hover:bg-purple-400 text-white p-4 rounded-3xl btn-shadow-purple flex flex-col items-center justify-center gap-1">
+              <span class="text-3xl sm:text-4xl">🎮</span>
+              <span class="font-display font-bold text-base sm:text-xl">BERMAIN</span>
+            </button>
+            <button onclick="startEvaluation()" class="btn-bounce bg-rose-500 hover:bg-rose-400 text-white p-4 rounded-3xl btn-shadow-rose flex flex-col items-center justify-center gap-1">
+              <span class="text-3xl sm:text-4xl">📝</span>
+              <span class="font-display font-bold text-base sm:text-xl">EVALUASI</span>
+            </button>
+            <button onclick="openGuide()" class="btn-bounce bg-sky-500 hover:bg-sky-400 text-white p-4 rounded-3xl btn-shadow-blue flex flex-col items-center justify-center gap-1">
+              <span class="text-3xl sm:text-4xl">🔊</span>
+              <span class="font-display font-bold text-base sm:text-xl">PETUNJUK</span>
+            </button>
+          </div>
+
+          <!-- 7 Menu Materi Utama -->
+          <div>
+            <div class="flex items-center justify-between mb-3 px-1">
+              <h2 class="font-display text-xl sm:text-2xl font-bold text-slate-700">Pilih Pelajaran:</h2>
+              <button onclick="openStarPage()" class="text-amber-700 font-bold text-sm sm:text-base underline">🏆 Lihat Hasil Belajar</button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              ${TOPICS_MENU.map(t => {
+                const isDone = state.completedTopics.includes(t.id);
+                return `
+                  <div class="bg-white border-4 border-slate-200 hover:border-amber-400 rounded-3xl p-4 card-shadow flex items-center gap-4 transition">
+                    <button onclick="openTopic(${t.id})" class="flex-1 flex items-center gap-4 text-left">
+                      <div class="w-16 h-16 sm:w-20 sm:h-20 ${t.color} text-white rounded-2xl flex items-center justify-center text-3xl sm:text-4xl font-bold shrink-0 shadow-inner">
+                        ${t.icon}
+                      </div>
+                      <div>
+                        <div class="flex items-center gap-1.5">
+                          <span class="text-xs font-extrabold uppercase bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">Materi ${t.id}</span>
+                          ${isDone ? '<span class="text-base" title="Selesai">⭐</span>' : ''}
+                        </div>
+                        <h3 class="font-display font-bold text-lg sm:text-xl text-slate-800 leading-tight mt-1">${t.title}</h3>
+                        <p class="text-sm font-semibold text-slate-500">${t.short}</p>
+                      </div>
+                    </button>
+                    <button onclick="speakText('Materi ${t.id}: ${t.title}. ${t.short}')" title="Dengarkan judul" class="btn-bounce bg-amber-100 hover:bg-amber-200 text-amber-800 p-3 rounded-2xl text-2xl shrink-0">
+                      🔊
+                    </button>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 7. HALAMAN 2 — PETUNJUK BELAJAR
+    // =========================================================================
+    function renderGuide() {
+      const steps = [
+        { num: 1, icon: '👀', title: 'Lihat Gambar', text: 'Lihat gambar besar di layar.' },
+        { num: 2, icon: '🔊', title: 'Dengarkan Suara', text: 'Tekan tombol speaker untuk mendengar suara.' },
+        { num: 3, icon: '👆', title: 'Sentuh Gambar', text: 'Sentuh gambar atau tombol yang kamu pilih.' },
+        { num: 4, icon: '👄', title: 'Tirukan Suara', text: 'Tirukan bunyi huruf bersama guru.' },
+        { num: 5, icon: '✅', title: 'Pilih Jawaban', text: 'Pilih gambar perilaku yang baik.' },
+        { num: 6, icon: '⭐', title: 'Dapatkan Bintang', text: 'Kumpulkan bintang yang banyak!' }
+      ];
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <div class="bg-white rounded-3xl p-5 border-4 border-sky-300 text-center card-shadow">
+            <h2 class="font-display text-2xl sm:text-4xl font-bold text-sky-700">📘 PETUNJUK BELAJAR</h2>
+            <p class="text-base sm:text-xl font-bold text-slate-600 mt-1">Sentuh setiap kotak untuk mendengarkan petunjuk</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            ${steps.map(s => `
+              <button onclick="playTone('click'); speakText('Nomor ${s.num}. ${s.title}. ${s.text}')" class="btn-bounce bg-white border-4 border-amber-200 hover:border-amber-400 rounded-3xl p-5 card-shadow flex flex-col items-center text-center gap-2">
+                <div class="w-12 h-12 bg-amber-400 text-amber-950 font-display font-bold text-2xl rounded-full flex items-center justify-center">${s.num}</div>
+                <div class="text-6xl my-1">${s.icon}</div>
+                <h3 class="font-display font-bold text-2xl text-slate-800">${s.title}</h3>
+                <p class="text-base font-bold text-slate-600">${s.text}</p>
+                <span class="mt-1 bg-sky-100 text-sky-800 px-3 py-1 rounded-full text-sm font-bold">🔊 Sentuh untuk dengar</span>
+              </button>
+            `).join('')}
+          </div>
+
+          <div class="text-center pt-2">
+            <button onclick="openTopic(1)" class="btn-bounce bg-emerald-500 text-white font-display font-bold text-2xl px-8 py-4 rounded-3xl btn-shadow-green">
+              ▶ AYO MULAI BELAJAR!
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 8. HALAMAN 3 — MATERI 1 SAMPAI 7
+    // =========================================================================
+    function openTopic(topicId) {
+      playTone('click');
+      state.currentScreen = 'topic';
+      state.currentTopicId = topicId;
+      state.topicStep = 0;
+      state.hijaiyahIndex = 0;
+      state.practiceIndex = 0;
+      state.storyIndex = 0;
+
+      if (topicId === 1) renderTopic1_Hijaiyah();
+      else if (topicId === 2) renderTopic2_Melafalkan();
+      else if (topicId === 3) renderTopicSlides(3, 'AKU CINTA ILMU', 'QS. Al-Mujadilah Ayat 11', CINTA_ILMU_SLIDES, 'amber');
+      else if (topicId === 4) renderTopicSlides(4, 'AKU ANAK YANG SABAR', 'QS. Al-Baqarah Ayat 155–157', SABAR_SLIDES, 'purple');
+      else if (topicId === 5) renderTopic5_KasihSayang();
+      else if (topicId === 6) renderTopic6_PerilakuBaik();
+      else if (topicId === 7) renderTopic7_Lingkungan();
+    }
+
+    function markTopicComplete(topicId) {
+      if (!state.completedTopics.includes(topicId)) {
+        state.completedTopics.push(topicId);
+        addStar(2);
+      }
+    }
+
+    // --- MATERI 1: MENGENAL & MENIRUKAN HURUF HIJAIYAH KASRATAIN ---
+    function renderTopic1_Hijaiyah() {
+      const item = HIJAIYAH_DATA[state.hijaiyahIndex];
+      setAhmadSpeech(item.audioText, true);
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-4">
+          <!-- Header Materi -->
+          <div class="bg-emerald-600 text-white rounded-3xl p-4 flex flex-wrap items-center justify-between gap-2 card-shadow">
+            <div>
+              <span class="text-xs font-extrabold uppercase bg-emerald-800 px-3 py-1 rounded-full">Materi 1 • Huruf ${state.hijaiyahIndex + 1} dari ${HIJAIYAH_DATA.length}</span>
+              <h2 class="font-display text-2xl sm:text-3xl font-bold mt-1">Huruf Hijaiyah Kasratain ( ـٍ )</h2>
+            </div>
+            <button onclick="speakText('Harakat kasratain adalah dua garis di bawah huruf. Bunyinya in.')" class="btn-bounce bg-white text-emerald-800 font-bold px-4 py-2.5 rounded-2xl text-base">
+              🔊 Apa itu Kasratain?
+            </button>
+          </div>
+
+          <!-- Kartu Utama Satu Konsep -->
+          <div class="bg-white border-4 border-emerald-300 rounded-3xl p-5 sm:p-8 card-shadow grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <!-- Huruf Besar & Jelas -->
+            <div onclick="speakText('${item.audioText}', '${item.id}')" class="cursor-pointer bg-emerald-50 border-4 border-emerald-400 rounded-3xl p-6 text-center hover:bg-emerald-100 transition">
+              <div class="arabic-text text-8xl sm:text-9xl font-bold text-emerald-700 my-2 select-none">${item.arabic}</div>
+              <div class="inline-block bg-amber-400 text-amber-950 font-display font-bold text-3xl sm:text-4xl px-6 py-2 rounded-2xl mt-2">
+                Bunyi: "${item.latin}"
+              </div>
+              <p class="text-base font-bold text-emerald-800 mt-3">👆 Sentuh huruf untuk dengar</p>
+            </div>
+
+            <!-- Animasi Mulut & Gambar Pendukung -->
+            <div class="flex flex-col items-center text-center space-y-4">
+              <div class="bg-sky-50 border-2 border-sky-200 rounded-3xl p-4 w-full flex items-center justify-around">
+                <!-- Ilustrasi Animasi Mulut Pelafalan -->
+                <div class="flex flex-col items-center">
+                  <svg viewBox="0 0 120 90" class="w-28 h-20">
+                    <rect x="10" y="10" width="100" height="70" rx="35" fill="#FDE68A" stroke="#D97706" stroke-width="3"/>
+                    <!-- Bibir & Mulut -->
+                    <ellipse id="hijaiyah-mouth" cx="60" cy="45" rx="26" ry="12" fill="#DC2626" stroke="#991B1B" stroke-width="3"/>
+                    <!-- Gigi atas -->
+                    <rect x="44" y="36" width="32" height="6" rx="2" fill="#FFFFFF"/>
+                  </svg>
+                  <span class="text-xs font-extrabold text-sky-800 uppercase mt-1">Gerakan Mulut</span>
+                </div>
+
+                <!-- Gambar Pendukung -->
+                <div class="flex flex-col items-center">
+                  <span class="text-6xl">${item.emoji}</span>
+                  <span class="text-sm font-bold text-slate-700 mt-1">${item.word}</span>
+                </div>
+              </div>
+
+              <p class="text-lg font-bold text-slate-700 bg-amber-50 border-2 border-amber-200 px-4 py-2 rounded-2xl w-full">
+                💡 ${item.hint}
+              </p>
+
+              <!-- 3 Tombol Wajib: DENGARKAN, AYO TIRUKAN, ULANGI -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 w-full">
+                <button onclick="playTone('click'); speakText('${item.audioText}', '${item.id}')" class="btn-bounce bg-sky-500 text-white font-display font-bold text-lg py-3.5 px-3 rounded-2xl btn-shadow-blue">
+                  🔊 DENGARKAN
+                </button>
+                <button onclick="triggerImitate('${item.latin}')" class="btn-bounce bg-emerald-500 text-white font-display font-bold text-lg py-3.5 px-3 rounded-2xl btn-shadow-green">
+                  👄 AYO TIRUKAN
+                </button>
+                <button onclick="playTone('click'); speakText('${item.latin}. ${item.latin}. ${item.latin}.', '${item.id}')" class="btn-bounce bg-amber-500 text-white font-display font-bold text-lg py-3.5 px-3 rounded-2xl btn-shadow-amber">
+                  🔁 ULANGI
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigasi Bawah -->
+          <div class="flex items-center justify-between gap-3 pt-1">
+            <button onclick="prevHijaiyah()" ${state.hijaiyahIndex === 0 ? 'disabled class="opacity-40 bg-slate-300 text-slate-600 font-display font-bold text-xl px-6 py-4 rounded-2xl"' : 'class="btn-bounce bg-slate-600 text-white font-display font-bold text-xl px-6 py-4 rounded-2xl"'}>
+              ◀ KEMBALI
+            </button>
+            <button onclick="nextHijaiyah()" class="btn-bounce bg-emerald-600 text-white font-display font-bold text-xl px-8 py-4 rounded-2xl btn-shadow-green">
+              ${state.hijaiyahIndex === HIJAIYAH_DATA.length - 1 ? 'SELESAI MATERI 1 ⭐' : 'SELANJUTNYA ▶'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function triggerImitate(latin) {
+      playTone('success');
+      addStar(1);
+      showFeedback(true, 'HEBAT SEKALI!', `Bagus! Kamu sudah menirukan bunyi ${latin}!`);
+    }
+
+    function prevHijaiyah() {
+      if (state.hijaiyahIndex > 0) {
+        playTone('click');
+        state.hijaiyahIndex--;
+        renderTopic1_Hijaiyah();
+      }
+    }
+
+    function nextHijaiyah() {
+      playTone('click');
+      if (state.hijaiyahIndex < HIJAIYAH_DATA.length - 1) {
+        state.hijaiyahIndex++;
+        renderTopic1_Hijaiyah();
+      } else {
+        markTopicComplete(1);
+        showFeedback(true, 'HEBAT! KAMU PINTAR!', 'Kamu sudah mengenal semua huruf hijaiyah kasratain!', () => openTopic(2));
+      }
+    }
+
+    // --- MATERI 2: MELAFALKAN HURUF HIJAIYAH DENGAN KASRATAIN ---
+    function renderTopic2_Melafalkan() {
+      const item = HIJAIYAH_DATA[state.practiceIndex];
+      const promptText = `Ayo berlatih melafalkan huruf ini! Tekan gambar huruf untuk mendengar, lalu tirukan bunyi ${item.latin}.`;
+      setAhmadSpeech(promptText, true);
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <div class="bg-sky-600 text-white rounded-3xl p-4 flex items-center justify-between card-shadow">
+            <div>
+              <span class="text-xs font-extrabold uppercase bg-sky-800 px-3 py-1 rounded-full">Materi 2 • Latihan ${state.practiceIndex + 1} dari ${HIJAIYAH_DATA.length}</span>
+              <h2 class="font-display text-2xl sm:text-3xl font-bold mt-1">Ayo Melafalkan Kasratain</h2>
+            </div>
+            <button onclick="speakText('${promptText}')" class="btn-bounce bg-white text-sky-800 font-bold px-4 py-2.5 rounded-2xl">
+              🔊 Instruksi
+            </button>
+          </div>
+
+          <div class="bg-white border-4 border-sky-300 rounded-3xl p-6 sm:p-8 text-center card-shadow max-w-2xl mx-auto">
+            <p class="text-lg sm:text-xl font-bold text-slate-600 mb-3">1. Sentuh huruf besar di bawah ini:</p>
+
+            <button onclick="playTone('click'); speakText('${item.latin}', '${item.id}')" class="btn-bounce w-48 h-48 sm:w-56 sm:h-56 mx-auto bg-amber-100 hover:bg-amber-200 border-4 border-amber-400 rounded-3xl flex flex-col items-center justify-center shadow-md">
+              <span class="arabic-text text-8xl sm:text-9xl font-bold text-amber-900">${item.arabic}</span>
+              <span class="text-base font-extrabold text-amber-800 mt-1">🔊 "${item.latin}"</span>
+            </button>
+
+            <p class="text-lg sm:text-xl font-bold text-slate-600 mt-5 mb-3">2. Sekarang tirukan suaranya dengan lantang!</p>
+
+            <div class="flex flex-wrap justify-center gap-3">
+              <button onclick="playTone('click'); speakText('${item.latin}', '${item.id}')" class="btn-bounce bg-sky-500 text-white font-display font-bold text-xl px-6 py-4 rounded-2xl btn-shadow-blue">
+                🔁 DENGAR LAGI
+              </button>
+              <button onclick="completePracticeItem('${item.latin}')" class="btn-bounce bg-emerald-500 text-white font-display font-bold text-xl px-6 py-4 rounded-2xl btn-shadow-green">
+                ⭐ SAYA SUDAH MENIRUKAN!
+              </button>
+            </div>
+          </div>
+
+          <div class="flex justify-between">
+            <button onclick="if(state.practiceIndex>0){state.practiceIndex--; renderTopic2_Melafalkan();}" class="btn-bounce bg-slate-600 text-white font-display font-bold text-xl px-6 py-3.5 rounded-2xl">
+              ◀ KEMBALI
+            </button>
+            <button onclick="nextPracticeItem()" class="btn-bounce bg-sky-600 text-white font-display font-bold text-xl px-7 py-3.5 rounded-2xl btn-shadow-blue">
+              HURUF BERIKUTNYA ▶
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function completePracticeItem(latin) {
+      addStar(1);
+      showFeedback(true, 'BAGUS SEKALI!', `Suaramu hebat saat melafalkan ${latin}!`, () => nextPracticeItem());
+    }
+
+    function nextPracticeItem() {
+      if (state.practiceIndex < HIJAIYAH_DATA.length - 1) {
+        state.practiceIndex++;
+        renderTopic2_Melafalkan();
+      } else {
+        markTopicComplete(2);
+        showFeedback(true, 'LUAR BIASA!', 'Kamu sudah berlatih melafalkan semua huruf!', () => openTopic(3));
+      }
+    }
+
+    // --- MATERI 3 & 4: SLIDE KONKRET (CINTA ILMU & SABAR) ---
+    function renderTopicSlides(topicId, mainTitle, subRef, slides, theme) {
+      const slide = slides[state.topicStep];
+      setAhmadSpeech(slide.audio, true);
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <div class="bg-${theme}-600 text-white rounded-3xl p-4 flex flex-wrap items-center justify-between gap-2 card-shadow">
+            <div>
+              <span class="text-xs font-extrabold uppercase bg-black/20 px-3 py-1 rounded-full">Materi ${topicId} • Gambar ${state.topicStep + 1} dari ${slides.length}</span>
+              <h2 class="font-display text-2xl sm:text-3xl font-bold mt-1">${mainTitle}</h2>
+              <p class="text-sm font-bold opacity-90">${subRef}</p>
+            </div>
+            <button onclick="speakText('${slide.audio}')" class="btn-bounce bg-white text-slate-800 font-bold px-4 py-2.5 rounded-2xl">
+              🔊 Dengarkan
+            </button>
+          </div>
+
+          <div onclick="speakText('${slide.audio}')" class="cursor-pointer bg-white border-4 border-${theme}-300 rounded-3xl p-6 sm:p-10 text-center card-shadow max-w-2xl mx-auto">
+            <div class="text-7xl sm:text-8xl mb-4 animate-float">${slide.emoji}</div>
+            <h3 class="font-display text-2xl sm:text-3xl font-bold text-slate-800 mb-3">${slide.title}</h3>
+            <p class="text-xl sm:text-2xl font-bold text-slate-600 leading-relaxed">${slide.desc}</p>
+            <div class="mt-5">
+              <span class="inline-flex items-center gap-2 bg-${theme}-100 text-${theme}-900 font-bold px-5 py-2.5 rounded-2xl text-lg">
+                🔊 Sentuh gambar untuk mendengar lagi
+              </span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-3">
+            <button onclick="if(state.topicStep>0){state.topicStep--; renderTopicSlides(${topicId}, '${mainTitle}', '${subRef}', ${topicId === 3 ? 'CINTA_ILMU_SLIDES' : 'SABAR_SLIDES'}, '${theme}');}" class="btn-bounce bg-slate-600 text-white font-display font-bold text-xl px-6 py-4 rounded-2xl">
+              ◀ KEMBALI
+            </button>
+            <button onclick="nextSlideStep(${topicId}, ${slides.length}, '${mainTitle}', '${subRef}', '${theme}')" class="btn-bounce bg-emerald-500 text-white font-display font-bold text-xl px-8 py-4 rounded-2xl btn-shadow-green">
+              ${state.topicStep === slides.length - 1 ? 'SELESAI ⭐' : 'SELANJUTNYA ▶'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function nextSlideStep(topicId, total, mainTitle, subRef, theme) {
+      playTone('click');
+      if (state.topicStep < total - 1) {
+        state.topicStep++;
+        renderTopicSlides(topicId, mainTitle, subRef, topicId === 3 ? CINTA_ILMU_SLIDES : SABAR_SLIDES, theme);
+      } else {
+        markTopicComplete(topicId);
+        showFeedback(true, 'HEBAT!', `Kamu sudah belajar materi ${mainTitle}!`, () => openTopic(topicId + 1));
+      }
+    }
+
+    // --- MATERI 5: MENERAPKAN PERILAKU KASIH SAYANG (BAIK VS TIDAK BAIK) ---
+    function renderTopic5_KasihSayang() {
+      const pair = KASIH_SAYANG_PAIRS[state.topicStep];
+      setAhmadSpeech(pair.audio, true);
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <div class="bg-rose-600 text-white rounded-3xl p-4 flex items-center justify-between card-shadow">
+            <div>
+              <span class="text-xs font-extrabold uppercase bg-rose-800 px-3 py-1 rounded-full">Materi 5 • Contoh ${state.topicStep + 1} dari ${KASIH_SAYANG_PAIRS.length}</span>
+              <h2 class="font-display text-2xl sm:text-3xl font-bold mt-1">Aku Sayang Teman & Sesama</h2>
+            </div>
+            <button onclick="speakText('${pair.audio}')" class="btn-bounce bg-white text-rose-800 font-bold px-4 py-2.5 rounded-2xl">
+              🔊 Dengar
+            </button>
+          </div>
+
+          <h3 class="font-display text-2xl sm:text-3xl font-bold text-center text-slate-800">${pair.title}</h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Perilaku Baik -->
+            <button onclick="playTone('success'); speakText('Perilaku baik: ${pair.goodText}. Ayo kita lakukan!')" class="btn-bounce bg-emerald-50 border-4 border-emerald-500 rounded-3xl p-6 text-center card-shadow flex flex-col items-center">
+              <span class="bg-emerald-500 text-white font-display font-bold text-lg px-4 py-1 rounded-full mb-3">✅ PERILAKU BAIK</span>
+              <div class="text-7xl sm:text-8xl my-3">${pair.goodEmoji}</div>
+              <p class="text-xl sm:text-2xl font-bold text-emerald-900">${pair.goodText}</p>
+              <span class="mt-3 text-sm font-bold text-emerald-700">🔊 Sentuh untuk dengar</span>
+            </button>
+
+            <!-- Perilaku Tidak Baik -->
+            <button onclick="playTone('gentle'); speakText('Perilaku tidak baik: ${pair.badText}. Jangan dilakukan ya!')" class="btn-bounce bg-amber-50 border-4 border-amber-400 rounded-3xl p-6 text-center card-shadow flex flex-col items-center">
+              <span class="bg-amber-500 text-white font-display font-bold text-lg px-4 py-1 rounded-full mb-3">⚠️ TIDAK BAIK</span>
+              <div class="text-7xl sm:text-8xl my-3">${pair.badEmoji}</div>
+              <p class="text-xl sm:text-2xl font-bold text-amber-900">${pair.badText}</p>
+              <span class="mt-3 text-sm font-bold text-amber-700">🔊 Sentuh untuk dengar</span>
+            </button>
+          </div>
+
+          <div class="flex justify-between pt-2">
+            <button onclick="if(state.topicStep>0){state.topicStep--; renderTopic5_KasihSayang();}" class="btn-bounce bg-slate-600 text-white font-display font-bold text-xl px-6 py-4 rounded-2xl">
+              ◀ KEMBALI
+            </button>
+            <button onclick="nextKasihSayang()" class="btn-bounce bg-rose-600 text-white font-display font-bold text-xl px-8 py-4 rounded-2xl btn-shadow-rose">
+              ${state.topicStep === KASIH_SAYANG_PAIRS.length - 1 ? 'SELESAI MATERI 5 ⭐' : 'SELANJUTNYA ▶'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function nextKasihSayang() {
+      playTone('click');
+      if (state.topicStep < KASIH_SAYANG_PAIRS.length - 1) {
+        state.topicStep++;
+        renderTopic5_KasihSayang();
+      } else {
+        markTopicComplete(5);
+        showFeedback(true, 'HEBAT!', 'Kamu anak yang penuh kasih sayang!', () => openTopic(6));
+      }
+    }
+
+    // --- MATERI 6: MENYEBUTKAN SIKAP KASIH SAYANG MELALUI PILIHAN GAMBAR ---
+    function renderTopic6_PerilakuBaik() {
+      const qObj = SIKAP_BAIK_QUIZ[state.topicStep];
+      setAhmadSpeech(qObj.question, true);
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <div class="bg-teal-600 text-white rounded-3xl p-4 flex items-center justify-between card-shadow">
+            <div>
+              <span class="text-xs font-extrabold uppercase bg-teal-800 px-3 py-1 rounded-full">Materi 6 • Latihan ${state.topicStep + 1} dari ${SIKAP_BAIK_QUIZ.length}</span>
+              <h2 class="font-display text-2xl sm:text-3xl font-bold mt-1">Pilih Perilaku yang Baik</h2>
+            </div>
+            <button onclick="speakText('${qObj.question}')" class="btn-bounce bg-white text-teal-800 font-bold px-4 py-2.5 rounded-2xl">
+              🔊 Ulangi Soal
+            </button>
+          </div>
+
+          <div class="bg-white border-4 border-teal-300 rounded-3xl p-5 text-center card-shadow">
+            <p class="font-display text-2xl sm:text-3xl font-bold text-slate-800">${qObj.question}</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            ${qObj.options.map((opt, idx) => `
+              <div class="bg-white border-4 border-slate-200 hover:border-teal-400 rounded-3xl p-5 card-shadow flex flex-col items-center text-center">
+                <button onclick="checkTopic6Answer(${opt.correct}, '${opt.label}')" class="btn-bounce w-full flex flex-col items-center py-3">
+                  <span class="text-7xl sm:text-8xl mb-3">${opt.emoji}</span>
+                  <span class="font-display text-2xl font-bold text-slate-800">${opt.label}</span>
+                  <span class="mt-3 bg-teal-500 text-white font-bold px-5 py-2 rounded-2xl text-lg">👆 Pilih Gambar Ini</span>
+                </button>
+                <button onclick="speakText('${opt.label}')" class="mt-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2 rounded-xl text-sm">
+                  🔊 Dengarkan Pilihan
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function checkTopic6Answer(isCorrect, label) {
+      if (isCorrect) {
+        addStar(1);
+        showFeedback(true, 'BAGUS SEKALI!', `Benar! ${label} adalah sikap kasih sayang.`, () => {
+          if (state.topicStep < SIKAP_BAIK_QUIZ.length - 1) {
+            state.topicStep++;
+            renderTopic6_PerilakuBaik();
+          } else {
+            markTopicComplete(6);
+            openTopic(7);
+          }
+        });
+      } else {
+        showFeedback(false, 'YUK, COBA LAGI!', `${label} bukan sikap kasih sayang. Pilih gambar yang baik ya!`);
+      }
+    }
+
+    // --- MATERI 7: CINTA LINGKUNGAN ("AKU SAYANG LINGKUNGANKU") ---
+    function renderTopic7_Lingkungan() {
+      const scene = CERITA_LINGKUNGAN[state.storyIndex];
+      setAhmadSpeech(scene.audio, true);
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <div class="bg-lime-600 text-white rounded-3xl p-4 flex flex-wrap items-center justify-between gap-2 card-shadow">
+            <div>
+              <span class="text-xs font-extrabold uppercase bg-lime-800 px-3 py-1 rounded-full">Materi 7 • Cerita Bergambar (${scene.step}/${CERITA_LINGKUNGAN.length})</span>
+              <h2 class="font-display text-2xl sm:text-3xl font-bold mt-1">📖 AKU SAYANG LINGKUNGANKU</h2>
+            </div>
+            <button onclick="speakText('${scene.audio}')" class="btn-bounce bg-white text-lime-800 font-bold px-4 py-2.5 rounded-2xl">
+              🔊 Bacakan Cerita
+            </button>
+          </div>
+
+          <!-- Adegan Cerita -->
+          <div onclick="speakText('${scene.audio}')" class="cursor-pointer bg-white border-4 border-lime-400 rounded-3xl p-6 sm:p-8 text-center card-shadow max-w-2xl mx-auto">
+            <span class="bg-lime-100 text-lime-900 font-bold px-4 py-1 rounded-full text-base">${scene.title}</span>
+            <div class="text-7xl sm:text-8xl my-5 animate-float">${scene.emoji}</div>
+            <p class="font-display text-2xl sm:text-3xl font-bold text-slate-800">${scene.text}</p>
+          </div>
+
+          <!-- Perbandingan Lingkungan Bersih vs Kotor -->
+          <div class="grid grid-cols-2 gap-3 max-w-2xl mx-auto">
+            <button onclick="speakText('Lingkungan bersih: banyak bunga, tidak ada sampah, udara segar.')" class="btn-bounce bg-emerald-50 border-2 border-emerald-400 p-3 rounded-2xl text-center">
+              <div class="text-4xl">🌳🌺✨</div>
+              <div class="font-bold text-emerald-900 text-sm sm:text-base mt-1">✅ Lingkungan Bersih 🔊</div>
+            </button>
+            <button onclick="speakText('Lingkungan kotor: banyak sampah berserakan, tidak sehat.')" class="btn-bounce bg-amber-50 border-2 border-amber-400 p-3 rounded-2xl text-center">
+              <div class="text-4xl">🗑️🪰🍂</div>
+              <div class="font-bold text-amber-900 text-sm sm:text-base mt-1">⚠️ Lingkungan Kotor 🔊</div>
+            </button>
+          </div>
+
+          <div class="flex justify-between pt-1">
+            <button onclick="if(state.storyIndex>0){state.storyIndex--; renderTopic7_Lingkungan();}" class="btn-bounce bg-slate-600 text-white font-display font-bold text-xl px-6 py-4 rounded-2xl">
+              ◀ SEBELUMNYA
+            </button>
+            <button onclick="nextStoryScene()" class="btn-bounce bg-lime-600 text-white font-display font-bold text-xl px-8 py-4 rounded-2xl btn-shadow-green">
+              ${state.storyIndex === CERITA_LINGKUNGAN.length - 1 ? 'SELESAI SEMUA MATERI 🏆' : 'ADEGAN BERIKUTNYA ▶'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function nextStoryScene() {
+      playTone('click');
+      if (state.storyIndex < CERITA_LINGKUNGAN.length - 1) {
+        state.storyIndex++;
+        renderTopic7_Lingkungan();
+      } else {
+        markTopicComplete(7);
+        showFeedback(true, 'HEBAT! KAMU SUDAH BELAJAR!', 'Semua 7 materi sudah selesai! Ayo bermain atau evaluasi!', () => openGamesMenu());
+      }
+    }
+
+    // =========================================================================
+    // 9. HALAMAN 4 — 5 PERMAINAN EDUKATIF (A, B, C, D, E)
+    // =========================================================================
+    function renderGamesMenu() {
+      const games = [
+        { id: 'A', title: 'Permainan A: PILIH GAMBAR', desc: 'Dengar suara lalu pilih gambar yang tepat', icon: '🖼️', color: 'bg-sky-500', shadow: 'btn-shadow-blue' },
+        { id: 'B', title: 'Permainan B: MANA YANG BENAR?', desc: 'Pilih perilaku baik dari dua gambar', icon: '⚖️', color: 'bg-emerald-500', shadow: 'btn-shadow-green' },
+        { id: 'C', title: 'Permainan C: PASANGKAN', desc: 'Pasangkan benda dengan perilaku benar', icon: '🧩', color: 'bg-amber-500', shadow: 'btn-shadow-amber' },
+        { id: 'D', title: 'Permainan D: DENGAR & PILIH', desc: 'Dengar bunyi huruf kasratain lalu pilih', icon: '🎧', color: 'bg-purple-500', shadow: 'btn-shadow-purple' },
+        { id: 'E', title: 'Permainan E: CERITA BERGAMBAR', desc: 'Pilih tindakan yang tepat di cerita', icon: '📖', color: 'bg-rose-500', shadow: 'btn-shadow-rose' }
+      ];
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <div class="bg-purple-600 text-white rounded-3xl p-5 text-center card-shadow">
+            <h2 class="font-display text-3xl sm:text-4xl font-bold">🎮 AYO BERMAIN SAMBIL BELAJAR!</h2>
+            <p class="text-lg font-bold text-purple-100 mt-1">Pilih permainan yang ingin kamu mainkan</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${games.map(g => `
+              <div class="bg-white border-4 border-slate-200 hover:border-purple-400 rounded-3xl p-4 card-shadow flex items-center gap-4">
+                <button onclick="startGame('${g.id}')" class="flex-1 flex items-center gap-4 text-left">
+                  <div class="w-16 h-16 sm:w-20 sm:h-20 ${g.color} text-white rounded-2xl flex items-center justify-center text-4xl shrink-0">
+                    ${g.icon}
+                  </div>
+                  <div>
+                    <h3 class="font-display font-bold text-xl text-slate-800">${g.title}</h3>
+                    <p class="text-sm sm:text-base font-semibold text-slate-500">${g.desc}</p>
+                  </div>
+                </button>
+                <button onclick="speakText('${g.title}. ${g.desc}')" class="btn-bounce bg-purple-100 text-purple-800 p-3 rounded-2xl text-2xl">
+                  🔊
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    const GAMES_DATA = {
+      A: [
+        { q: 'Sentuh gambar anak yang sedang membaca buku!', opts: [{ e: '📖👦', l: 'Membaca buku', ok: true }, { e: '⚽🏃', l: 'Bermain bola', ok: false }] },
+        { q: 'Sentuh gambar tempat sampah!', opts: [{ e: '🗑️✅', l: 'Tempat sampah', ok: true }, { e: '🛏️💤', l: 'Tempat tidur', ok: false }] }
+      ],
+      B: [
+        { q: 'Mana perilaku yang benar saat ada teman jatuh?', opts: [{ e: '🤝😊', l: 'Menolong teman', ok: true }, { e: '😝👉', l: 'Mengejek teman', ok: false }] },
+        { q: 'Mana perilaku yang benar saat mainan rusak?', opts: [{ e: '🤲😊', l: 'Sabar dan tenang', ok: true }, { e: '😡💥', l: 'Marah dan membanting', ok: false }] }
+      ],
+      C: [
+        { q: 'Pasangkan: Ada sampah di lantai. Pasangannya adalah...', opts: [{ e: '🗑️🤏', l: 'Buang ke tempat sampah', ok: true }, { e: '👣🙈', l: 'Injak saja', ok: false }] },
+        { q: 'Pasangkan: Bunga di taman layu. Pasangannya adalah...', opts: [{ e: '🚿🌱', l: 'Siram dengan air', ok: true }, { e: '✂️🥀', l: 'Petik bunganya', ok: false }] }
+      ],
+      D: [
+        { q: 'Dengarkan suara: BIN. Pilih huruf BIN!', sound: 'BIN', soundKey: 'ba_kasratain', opts: [{ e: 'بٍ', l: 'BIN', ok: true }, { e: 'مٍ', l: 'MIN', ok: false }] },
+        { q: 'Dengarkan suara: TIN. Pilih huruf TIN!', sound: 'TIN', soundKey: 'ta_kasratain', opts: [{ e: 'دٍ', l: 'DIN', ok: false }, { e: 'تٍ', l: 'TIN', ok: true }] }
+      ],
+      E: [
+        { q: 'Cerita: Budi melihat pensil Andi jatuh. Apa yang harus Budi lakukan?', opts: [{ e: '✏️🤝', l: 'Mengambil dan memberikan ke Andi', ok: true }, { e: '🙈🎒', l: 'Menyembunyikan pensil Andi', ok: false }] },
+        { q: 'Cerita: Siti punya dua kue, temannya tidak bawa bekal. Apa tindakan Siti?', opts: [{ e: '🍪❤️', l: 'Berbagi satu kue untuk teman', ok: true }, { e: '😋🚫', l: 'Makan semua sendirian', ok: false }] }
+      ]
+    };
+
+    function startGame(type) {
+      playTone('click');
+      state.gameType = type;
+      state.gameStep = 0;
+      renderGamePlay();
+    }
+
+    function renderGamePlay() {
+      const list = GAMES_DATA[state.gameType];
+      const item = list[state.gameStep];
+      setAhmadSpeech(item.q, true);
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <div class="bg-purple-600 text-white rounded-3xl p-4 flex items-center justify-between card-shadow">
+            <h2 class="font-display text-2xl sm:text-3xl font-bold">🎮 Permainan ${state.gameType} (${state.gameStep + 1}/${list.length})</h2>
+            <button onclick="speakText('${item.q}', ${item.soundKey ? `'${item.soundKey}'` : 'null'})" class="btn-bounce bg-white text-purple-800 font-bold px-4 py-2.5 rounded-2xl">
+              🔊 Dengar Soal
+            </button>
+          </div>
+
+          <div class="bg-white border-4 border-purple-300 rounded-3xl p-6 text-center card-shadow">
+            <p class="font-display text-2xl sm:text-3xl font-bold text-slate-800">${item.q}</p>
+            ${item.sound ? `
+              <button onclick="speakText('${item.sound}', '${item.soundKey}')" class="btn-bounce mt-4 bg-amber-400 text-amber-950 font-display font-bold text-2xl px-6 py-3 rounded-2xl btn-shadow-amber">
+                🔊 BUNYIKAN SUARA HURUF
+              </button>
+            ` : ''}
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            ${item.opts.map(o => `
+              <div class="bg-white border-4 border-slate-200 hover:border-purple-400 rounded-3xl p-5 card-shadow flex flex-col items-center text-center">
+                <button onclick="handleGameAnswer(${o.ok}, '${o.l}')" class="btn-bounce w-full flex flex-col items-center py-3">
+                  <span class="text-7xl sm:text-8xl mb-3 ${state.gameType === 'D' ? 'arabic-text font-bold text-purple-800' : ''}">${o.e}</span>
+                  <span class="font-display text-2xl font-bold text-slate-800">${o.l}</span>
+                </button>
+                <button onclick="speakText('${o.l}')" class="mt-2 bg-slate-100 text-slate-700 font-bold px-4 py-2 rounded-xl text-sm">
+                  🔊 Dengar Pilihan
+                </button>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="text-center">
+            <button onclick="openGamesMenu()" class="btn-bounce bg-slate-500 text-white font-display font-bold text-lg px-6 py-3 rounded-2xl">
+              ◀ PILIH PERMAINAN LAIN
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleGameAnswer(isOk, label) {
+      if (isOk) {
+        addStar(1);
+        const list = GAMES_DATA[state.gameType];
+        showFeedback(true, 'HEBAT!', `Pilihanmu tepat: ${label}!`, () => {
+          if (state.gameStep < list.length - 1) {
+            state.gameStep++;
+            renderGamePlay();
+          } else {
+            openGamesMenu();
+          }
+        });
+      } else {
+        showFeedback(false, 'YUK, COBA LAGI!', 'Ayo dengarkan instruksinya dan pilih gambar yang tepat!');
+      }
+    }
+
+    // =========================================================================
+    // 10. HALAMAN 5 — EVALUASI INTERAKTIF (20 SOAL VISUAL + AUDIO)
+    // =========================================================================
+    function renderEvaluation() {
+      const qObj = EVALUATION_QUESTIONS[state.evalIndex];
+      const fullPrompt = `Soal nomor ${state.evalIndex + 1}. ${qObj.q}`;
+      setAhmadSpeech(fullPrompt, true);
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop space-y-5">
+          <!-- Progress Bar -->
+          <div class="bg-rose-600 text-white rounded-3xl p-4 card-shadow">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span class="font-display font-bold text-xl sm:text-2xl">📝 EVALUASI: Soal ${state.evalIndex + 1} / ${EVALUATION_QUESTIONS.length}</span>
+              <span class="bg-rose-800 text-xs font-extrabold uppercase px-3 py-1 rounded-full">${qObj.category}</span>
+            </div>
+            <div class="w-full bg-rose-900/50 h-4 rounded-full overflow-hidden">
+              <div class="bg-amber-300 h-full transition-all duration-300" style="width: ${((state.evalIndex + 1) / EVALUATION_QUESTIONS.length) * 100}%"></div>
+            </div>
+          </div>
+
+          <!-- Pertanyaan dengan Audio -->
+          <div class="bg-white border-4 border-rose-300 rounded-3xl p-5 sm:p-6 text-center card-shadow">
+            <p class="font-display text-2xl sm:text-3xl font-bold text-slate-800 mb-4">${qObj.q}</p>
+            <div class="flex flex-wrap justify-center gap-3">
+              <button onclick="speakText('${fullPrompt}')" class="btn-bounce bg-sky-500 text-white font-display font-bold text-xl px-6 py-3 rounded-2xl btn-shadow-blue">
+                🔊 BACAKAN SOAL
+              </button>
+              ${qObj.soundText ? `
+                <button onclick="speakText('${qObj.soundText}', '${qObj.soundKey}')" class="btn-bounce bg-amber-400 text-amber-950 font-display font-bold text-xl px-6 py-3 rounded-2xl btn-shadow-amber">
+                  👂 DENGAR BUNYI HURUF
+                </button>
+              ` : ''}
+            </div>
+          </div>
+
+          <!-- Pilihan Jawaban Bergambar (2 atau 3 Pilihan) -->
+          <div class="grid grid-cols-1 sm:grid-cols-${qObj.options.length} gap-4">
+            ${qObj.options.map(opt => `
+              <div class="bg-white border-4 border-slate-200 hover:border-rose-400 rounded-3xl p-5 card-shadow flex flex-col items-center text-center">
+                <button onclick="submitEvalAnswer(${opt.correct}, '${opt.label}')" class="btn-bounce w-full flex flex-col items-center py-3">
+                  <span class="text-7xl sm:text-8xl mb-3 ${qObj.category.includes('Hijaiyah') ? 'arabic-text font-bold text-emerald-700' : ''}">${opt.main}</span>
+                  <span class="font-display text-xl sm:text-2xl font-bold text-slate-800">${opt.label}</span>
+                  <span class="mt-3 bg-emerald-500 text-white font-bold px-5 py-2 rounded-2xl text-base">👆 Sentuh Jawaban</span>
+                </button>
+                <button onclick="speakText('${opt.label}')" class="mt-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2 rounded-xl text-sm">
+                  🔊 Dengarkan
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function submitEvalAnswer(isCorrect, label) {
+      if (isCorrect) {
+        state.evalScore++;
+        addStar(1);
+        showFeedback(true, 'HEBAT!', `Jawabanmu benar: ${label}!`, () => {
+          if (state.evalIndex < EVALUATION_QUESTIONS.length - 1) {
+            state.evalIndex++;
+            renderEvaluation();
+          } else {
+            openStarPage(true);
+          }
+        });
+      } else {
+        // Tidak menghukum, tanpa tanda silang, siswa boleh mengulang tanpa batas
+        showFeedback(false, 'YUK, COBA LAGI!', 'Dengarkan soalnya sekali lagi, lalu pilih gambar yang paling baik ya!');
+      }
+    }
+
+    // =========================================================================
+    // 11. HALAMAN 6 — HASIL BELAJAR (PENGUATAN POSITIF)
+    // =========================================================================
+    function renderStarPage(fromEval = false) {
+      const msg = 'HEBAT! KAMU SUDAH BELAJAR! TERIMA KASIH SUDAH BERUSAHA!';
+      setAhmadSpeech(msg, true);
+
+      const container = document.getElementById('app-container');
+      container.innerHTML = `
+        <div class="animate-pop bg-white border-4 border-yellow-400 rounded-3xl p-6 sm:p-10 text-center card-shadow max-w-2xl mx-auto space-y-5">
+          <div class="text-7xl sm:text-8xl animate-bounce">🏆🎉😊</div>
+          <h2 class="font-display text-3xl sm:text-5xl font-bold text-emerald-600">HEBAT! KAMU SUDAH BELAJAR!</h2>
+          <p class="font-display text-2xl sm:text-3xl font-bold text-amber-600">TERIMA KASIH SUDAH BERUSAHA!</p>
+
+          <div class="bg-yellow-50 border-4 border-yellow-300 rounded-3xl p-6">
+            <p class="text-lg font-bold text-slate-600 mb-1">Total Bintang Kamu:</p>
+            <div class="text-6xl sm:text-7xl font-display font-bold text-yellow-500 flex items-center justify-center gap-3">
+              <span>⭐</span>
+              <span>${state.stars}</span>
+            </div>
+            ${fromEval ? `<p class="text-xl font-bold text-emerald-700 mt-3">Semua 20 soal latihan berhasil kamu selesaikan!</p>` : ''}
+          </div>
+
+          <div class="flex flex-wrap justify-center gap-3 pt-2">
+            <button onclick="speakText('Hebat! Kamu sudah belajar! Terima kasih sudah berusaha! Yuk, belajar lagi!')" class="btn-bounce bg-sky-500 text-white font-display font-bold text-xl px-6 py-4 rounded-2xl btn-shadow-blue">
+              🔊 DENGAR PUJIAN
+            </button>
+            <button onclick="goHome()" class="btn-bounce bg-emerald-500 text-white font-display font-bold text-xl px-7 py-4 rounded-2xl btn-shadow-green">
+              🔁 YUK, BELAJAR LAGI!
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 12. PENGATURAN AUDIO ASLI GURU (MODAL GURU)
+    // =========================================================================
+    function toggleTeacherModal() {
+      const modal = document.getElementById('teacher-modal');
+      if (modal.classList.contains('hidden')) {
+        renderCustomAudioManager();
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      } else {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function renderCustomAudioManager() {
+      const listEl = document.getElementById('custom-audio-list');
+      listEl.innerHTML = HIJAIYAH_DATA.map(h => `
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-3 flex items-center justify-between gap-2">
+          <div class="flex items-center gap-3">
+            <span class="arabic-text text-4xl font-bold text-emerald-700 w-10 text-center">${h.arabic}</span>
+            <div>
+              <div class="font-bold text-slate-800">${h.latin}</div>
+              <div class="text-xs text-slate-500">${state.customAudioUrls[h.id] ? '✅ Audio Guru Aktif' : 'Suara Sistem (Default)'}</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="speakText('${h.latin}', '${h.id}')" class="bg-sky-100 text-sky-800 px-3 py-1.5 rounded-xl font-bold text-sm">🔊 Tes</button>
+            <label class="cursor-pointer bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-xl font-bold text-sm">
+              📂 MP3
+              <input type="file" accept="audio/*" class="hidden" onchange="uploadCustomAudio(event, '${h.id}')">
+            </label>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function uploadCustomAudio(event, hijaiyahId) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      state.customAudioUrls[hijaiyahId] = url;
+      renderCustomAudioManager();
+      playTone('success');
+    }
+
+    // =========================================================================
+    // 13. INISIALISASI SAAT HALAMAN DIMUAT
+    // =========================================================================
+    window.onload = function () {
+      document.getElementById('star-count').textContent = state.stars;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+      }
+      renderHome();
+    };
+  </script>
+</body>
+</html>
